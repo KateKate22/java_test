@@ -6,15 +6,13 @@ public class MyFirstProgram {
     hello("Tom");
     hello("Alex");
 
-    double w = 10.5;
+    Square square = new Square(10.5);
 
-    System.out.println("Площадь квадрата со стороной " + w + " равна " + area(w));
+    System.out.println("Площадь квадрата со стороной " + square.a + " равна " + square.calcArea());
 
-    double a = 14.7;
-    double b = 17.2;
+    Rectangle rectangle = new Rectangle(14.7,  17.2);
 
-    System.out.println("Площадь прямоугольника со сторонами " + a + " и " + b + " равна " + area(a,b));
-
+    System.out.println("Площадь прямоугольника со сторонами " + rectangle.a + " и " + rectangle.b + " равна " + rectangle.calcArea());
     }
 
   public static void hello(String name) {
