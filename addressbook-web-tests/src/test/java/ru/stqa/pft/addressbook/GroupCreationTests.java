@@ -19,7 +19,7 @@ public class GroupCreationTests {
     wd = new ChromeDriver();
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
-    wd.get("http://localhost/addressbook/group.php");
+    wd.get("http://localhost/addressbook/");
     login("admin", "secret");
   }
 
@@ -40,7 +40,11 @@ public class GroupCreationTests {
     fillGroupForm(new GroupData("test1", "test2", "test3"));
     submitGroupCreation();
     returnToGroupPage();
-    //wd.findElement(By.linkText("Logout")).click();
+    logout();
+  }
+
+  private void logout() {
+    wd.findElement(By.linkText("Logout")).click();
   }
 
   private void returnToGroupPage() {
@@ -76,16 +80,6 @@ public class GroupCreationTests {
     wd.quit();
   }
 
-/*
-    private boolean isElementPresent(By by) {
-      try {
-        wd.findElement(by);
-        return true;
-      } catch (NoSuchElementException e) {
-        return false;
-      }
-    }
-*/
   private boolean isAlertPresent() {
     try {
       wd.switchTo().alert();
