@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.testng:testng:6.9.10'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.8.1'
+}
