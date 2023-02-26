@@ -2,6 +2,8 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.Browser;
 
 import java.time.Duration;
 
@@ -13,9 +15,17 @@ public class ApplicationManager {
   private GroupHelper groupHelper;
   private SessionHelper sessionHelper;
 
+  private String browser;
+  public ApplicationManager(String browser) {
+    this.browser = browser;
+  }
+
   public void init() {
-    System.setProperty("webdriver.chrome.driver", "C:\\Windows\\System32\\chromedriver.exe");
-    wd = new ChromeDriver();
+    if (browser.equals(Browser.CHROME.browserName())) {
+      wd = new ChromeDriver();
+    } else if (browser.equals(Browser.FIREFOX.browserName())) {
+      wd = new FirefoxDriver();
+    }
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 
     wd.get("http://localhost/addressbook/");
