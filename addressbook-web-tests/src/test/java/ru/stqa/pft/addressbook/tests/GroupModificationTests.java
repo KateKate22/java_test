@@ -7,11 +7,14 @@ public class GroupModificationTests extends TestBase {
   @Test
   public void testGroupModification() {
     app.getNavigationHelper().gotoGroupPage();
-    app.getGroupHelper().selectGroup();
-    app.getGroupHelper().editSelectedGroups();
-    app.getGroupHelper().fillGroupForm(new GroupData("testEdited1", "testEdited2", "testEdited3"));
-    app.getGroupHelper().submitGroupModification();
-    app.getGroupHelper().returnToGroupPage();
-    app.getSessionHelper().logout();
+    if (! app.getGroupHelper().groupExists()) { // проверяем есть ли хотя бы одна группа в списке
+      app.getGroupHelper().createGroup(new GroupData("test1", null, null));
+    }
+      app.getGroupHelper().selectGroup();
+      app.getGroupHelper().editSelectedGroups();
+      app.getGroupHelper().fillGroupForm(new GroupData("testEdited1", "test2", "testEdited3"));
+      app.getGroupHelper().submitGroupModification();
+      app.getGroupHelper().returnToGroupPage();
+      app.getSessionHelper().logout();
   }
 }

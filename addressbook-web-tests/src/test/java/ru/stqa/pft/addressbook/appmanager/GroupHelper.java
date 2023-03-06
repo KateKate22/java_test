@@ -41,4 +41,21 @@ public class GroupHelper extends HelperBase {
   }
 
   public void submitGroupModification() { click(By.name("update")); }
+
+  public boolean groupExists() { // метод проверяет есть ли в списке хотя бы одна группа в списке
+    return isElementPresent(By.name("selected[]"));
+  }
+
+  public void createGroup(GroupData group) { // объединияем методы, относящиеся к созданию группы
+    initGroupCreation();
+    fillGroupForm(group);
+    submitGroupCreation();
+    returnToGroupPage();
+  }
+
+  public boolean groupExistsTest1() { // метод проверяет есть ли в списке группа с наименованием test1
+    click(By.linkText("groups"));
+    // boolean gr = isElementPresent(By.xpath("//input[@title='Select (test1)']"));
+    return isElementPresent(By.xpath("//input[@title='Select (test1)']"));
+  }
 }
