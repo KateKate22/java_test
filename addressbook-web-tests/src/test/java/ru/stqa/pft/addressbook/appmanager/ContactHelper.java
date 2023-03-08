@@ -58,9 +58,9 @@ public class ContactHelper extends HelperBase {
     return isElementPresent(By.name("selected[]"));
   }
 
-  public void createContact(ContactData contactData, boolean creation) { // объединияем методы, относящиеся к созданию контакта
+  public void createContact(ContactData contactData) { // объединияем методы, относящиеся к созданию контакта
     initContactCreation();
-    fillContactForm(contactData, creation);
+    fillContactForm(contactData, true);
     submitContactCreation();
   }
 }
