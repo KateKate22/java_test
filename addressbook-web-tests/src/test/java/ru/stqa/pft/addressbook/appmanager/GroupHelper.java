@@ -53,9 +53,8 @@ public class GroupHelper extends HelperBase {
     returnToGroupPage();
   }
 
-  public boolean groupExistsTest1() { // метод проверяет есть ли в списке группа с наименованием test1
-    click(By.linkText("groups"));
-    // boolean gr = isElementPresent(By.xpath("//input[@title='Select (test1)']"));
-    return isElementPresent(By.xpath("//input[@title='Select (test1)']"));
+  public String groupName() { //метод, который возвращает название первой попавшейся группы в списке
+    String groupName = wd.findElement(By.name("selected[]")).getAttribute("title");
+    return groupName.substring(8, groupName.length()-1);
   }
 }
