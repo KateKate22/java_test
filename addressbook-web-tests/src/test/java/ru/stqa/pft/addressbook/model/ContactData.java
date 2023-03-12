@@ -1,6 +1,9 @@
 package ru.stqa.pft.addressbook.model;
 
+import java.util.Objects;
+
 public class ContactData {
+  private int id;
   private final String name;
   private final String surname;
   private final String nickname;
@@ -15,6 +18,7 @@ public class ContactData {
   private final String group;
 
   public ContactData(String name, String surname, String nickname, String company, String home, String mobile, String email, String email2, String bday, String bmonth, String byear, String group) {
+    this.id = Integer.MAX_VALUE;
     this.name = name;
     this.surname = surname;
     this.nickname = nickname;
@@ -27,6 +31,26 @@ public class ContactData {
     this.bmonth = bmonth;
     this.byear = byear;
     this.group = group;
+  }
+
+  public ContactData(int id, String name, String surname, String nickname, String company, String home, String mobile, String email, String email2, String bday, String bmonth, String byear, String group) {
+    this.id = id;
+    this.name = name;
+    this.surname = surname;
+    this.nickname = nickname;
+    this.company = company;
+    this.home = home;
+    this.mobile = mobile;
+    this.email = email;
+    this.email2 = email2;
+    this.bday = bday;
+    this.bmonth = bmonth;
+    this.byear = byear;
+    this.group = group;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getName() {
@@ -74,4 +98,25 @@ public class ContactData {
   }
 
   public String getGroup() { return group; }
+
+  @Override
+  public String toString() {
+    return "ContactData{" +
+            "name='" + name + '\'' +
+            ", surname='" + surname + '\'' +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ContactData that = (ContactData) o;
+    return Objects.equals(name, that.name) && Objects.equals(surname, that.surname);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, surname);
+  }
 }

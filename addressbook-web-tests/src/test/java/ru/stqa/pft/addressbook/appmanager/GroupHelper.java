@@ -2,7 +2,11 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.GroupData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupHelper extends HelperBase {
 
@@ -32,15 +36,18 @@ public class GroupHelper extends HelperBase {
     click(By.name("delete"));
   }
 
-  public void selectGroup() {
-    click(By.name("selected[]"));
+  public void selectGroup(int index) {
+    wd.findElements(By.name("selected[]")).get(index).click();
+    //click(By.name("selected[]"));
   }
 
   public void editSelectedGroups() {
     click(By.name("edit"));
   }
 
-  public void submitGroupModification() { click(By.name("update")); }
+  public void submitGroupModification() {
+    click(By.name("update"));
+  }
 
   public boolean groupExists() { // метод проверяет есть ли в списке хотя бы одна группа в списке
     return isElementPresent(By.name("selected[]"));
@@ -55,6 +62,22 @@ public class GroupHelper extends HelperBase {
 
   public String groupName() { //метод, который возвращает название первой попавшейся группы в списке
     String groupName = wd.findElement(By.name("selected[]")).getAttribute("title");
-    return groupName.substring(8, groupName.length()-1);
+    return groupName.substring(8, groupName.length() - 1);
+  }
+
+  public int getGroupCount() {
+    return wd.findElements(By.xpath("//span[@class='group']")).size();
+  }
+
+  public List<GroupData> getGroupList() {
+    List<GroupData> groups = new ArrayList<GroupData>(); // cоздаем список объектов класса GroupData
+    List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //создаем список веб-элементов
+    for (WebElement element: elements) { // перебираем все элементы
+      String name = element.getText(); // в строковую перемененную записываем навание группы
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      GroupData group = new GroupData(id, name, null, null); // создаем объект класса GroupData, в конструкторе передаем искомое название группы первым параметром
+      groups.add(group); // добавляем объект класса GroupData в список
+    }
+    return groups;
   }
 }
