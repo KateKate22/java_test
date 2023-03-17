@@ -5,8 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GroupHelper extends HelperBase {
 
@@ -41,6 +42,10 @@ public class GroupHelper extends HelperBase {
     //click(By.name("selected[]"));
   }
 
+  private void selectGroupById(int id) {
+    wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+  }
+
   public void editSelectedGroups() {
     click(By.name("edit"));
   }
@@ -53,10 +58,29 @@ public class GroupHelper extends HelperBase {
     return isElementPresent(By.name("selected[]"));
   }
 
-  public void createGroup(GroupData group) { // объединияем методы, относящиеся к созданию группы
+  public void create(GroupData group) { // объединияем методы, относящиеся к созданию группы
     initGroupCreation();
     fillGroupForm(group);
     submitGroupCreation();
+    returnToGroupPage();
+  }
+  public void modify(GroupData group) {
+    selectGroupById(group.getId());
+    editSelectedGroups();
+    fillGroupForm(group);
+    submitGroupModification();
+    returnToGroupPage();
+  }
+
+  /*public void delete(int index) {
+    selectGroup(index);
+    deleteSelectedGroups();
+    returnToGroupPage();
+  }*/
+
+  public void delete(GroupData group) {
+    selectGroupById(group.getId());
+    deleteSelectedGroups();
     returnToGroupPage();
   }
 
@@ -64,19 +88,30 @@ public class GroupHelper extends HelperBase {
     String groupName = wd.findElement(By.name("selected[]")).getAttribute("title");
     return groupName.substring(8, groupName.length() - 1);
   }
-
   public int getGroupCount() {
     return wd.findElements(By.xpath("//span[@class='group']")).size();
   }
 
-  public List<GroupData> getGroupList() {
+  /*public List<GroupData> list() {
     List<GroupData> groups = new ArrayList<GroupData>(); // cоздаем список объектов класса GroupData
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //создаем список веб-элементов
     for (WebElement element: elements) { // перебираем все элементы
       String name = element.getText(); // в строковую перемененную записываем навание группы
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-      GroupData group = new GroupData(id, name, null, null); // создаем объект класса GroupData, в конструкторе передаем искомое название группы первым параметром
-      groups.add(group); // добавляем объект класса GroupData в список
+      //GroupData group = new GroupData().withId(id).withName(name); // создаем объект класса GroupData, в конструкторе передаем искомое название группы первым параметром
+      groups.add(new GroupData().withId(id).withName(name)); // добавляем объект класса GroupData в список
+    }
+    return groups;
+  }*/
+
+  public Set<GroupData> all() {
+    Set<GroupData> groups = new HashSet<>(); // cоздаем список объектов класса GroupData
+    List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //создаем список веб-элементов
+    for (WebElement element: elements) { // перебираем все элементы
+      String name = element.getText(); // в строковую перемененную записываем навание группы
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      //GroupData group = new GroupData().withId(id).withName(name); // создаем объект класса GroupData, в конструкторе передаем искомое название группы первым параметром
+      groups.add(new GroupData().withId(id).withName(name)); // добавляем объект класса GroupData в список
     }
     return groups;
   }

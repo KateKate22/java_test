@@ -11,7 +11,7 @@ public class NavigationHelper extends HelperBase {
     super(wd);
   }
 
-  public void gotoGroupPage() {
+  public void groupPage() {
     //boolean a1 = isElementPresent(By.tagName("h1"));
     //boolean a2 = isElementPresent(By.name("new"));
     //boolean a3 = wd.findElement(By.tagName("h1")).getText().equals("Groups");

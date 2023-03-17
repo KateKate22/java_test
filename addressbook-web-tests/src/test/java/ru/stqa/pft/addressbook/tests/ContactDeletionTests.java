@@ -11,15 +11,15 @@ public class ContactDeletionTests extends TestBase {
   String groupName; //  строковая переменная, хранящая имя группы, для последующей передачи в качестве параметра при создании контакта;
   @Test
   public void testContactDeletion() throws InterruptedException {
-    app.getNavigationHelper().returnToHomePage();
+    app.goTo().returnToHomePage();
     if (! app.getContactHelper().contactExists()) { // проверяем есть ли хотя бы один контакт в табличной части
-      app.getNavigationHelper().gotoGroupPage(); // переходим в группы для осуществления последующей проверки
-      if (! app.getGroupHelper().groupExists()) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
-        app.getGroupHelper().createGroup(new GroupData("test1", null, null));
+      app.goTo().groupPage(); // переходим в группы для осуществления последующей проверки
+      if (! app.group().groupExists()) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
+        app.group().create(new GroupData().withName("test1"));
       }
-      groupName = app.getGroupHelper().groupName(); // записываем в строковую переменную имя созданной либо уже имеющейся группы
+      groupName = app.group().groupName(); // записываем в строковую переменную имя созданной либо уже имеющейся группы
       app.getContactHelper().createContact(new ContactData("Petr", "Petrov", "Wee", "Flower", "88142555555", "+79110000000", "peterpetrov@yandex.ru", "peter11petrov@gmai.com", "6", "May", "1980", groupName));
-      app.getNavigationHelper().returnToHomePage();
+      app.goTo().returnToHomePage();
     }
     List<ContactData> before = app.getContactHelper().getContactList();
     app.getContactHelper().selectContactToDelete(before.size()-1);
@@ -29,6 +29,5 @@ public class ContactDeletionTests extends TestBase {
     Assert.assertEquals(after.size(), before.size()-1);
     before.remove(before.size()-1);
     Assert.assertEquals(after, before);
-    app.getSessionHelper().logout();
   }
 }

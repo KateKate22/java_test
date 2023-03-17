@@ -1,35 +1,33 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 public class GroupModificationTests extends TestBase {
+
+  @BeforeMethod
+  public void ensurePrecondions() {
+    app.goTo().groupPage();
+    if (app.group().all().size() == 0) { // проверяем есть ли хотя бы одна группа в списке
+      app.group().create(new GroupData().withName("test1"));
+    }
+  }
   @Test
   public void testGroupModification() {
-    app.getNavigationHelper().gotoGroupPage();
-    if (!app.getGroupHelper().groupExists()) { // проверяем есть ли хотя бы одна группа в списке
-      app.getGroupHelper().createGroup(new GroupData("test1", null, null));
-    }
-    List<GroupData> before = app.getGroupHelper().getGroupList();
-    app.getGroupHelper().selectGroup(before.size()-1);
-    app.getGroupHelper().editSelectedGroups();
-    GroupData group = new GroupData(before.get(before.size()-1).getId(), "testEdited1", "test2", "testEdited3");
-    app.getGroupHelper().fillGroupForm(group);
-    app.getGroupHelper().submitGroupModification();
-    app.getGroupHelper().returnToGroupPage();
-    List<GroupData> after = app.getGroupHelper().getGroupList();
+    Set<GroupData> before = app.group().all();
+    GroupData modifiedGroup = before.iterator().next();
+    GroupData group = new GroupData()
+            .withId(modifiedGroup.getId()).withName("testEdited1").withHeader("testEdited2").withFooter("testEdited3");
+    app.group().modify(group);
+    Set<GroupData> after = app.group().all();
     Assert.assertEquals(after.size(), before.size());
-    before.remove(before.size()-1);
+    before.remove(modifiedGroup);
     before.add(group);
-    Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId);
-    after.sort(byId);
     Assert.assertEquals(before, after);
     //Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
-    app.getSessionHelper().logout();
   }
 }
