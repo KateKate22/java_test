@@ -25,7 +25,11 @@ public class ContactCreationTests extends TestBase {
   @Test
   public void testContactCreation() throws Exception {
     Contacts before = app.contact().all();
-    ContactData contact = new ContactData("Petr", "Petrov", "Wee", "Flower", "88142555555", "+79110000000", "peterpetrov@yandex.ru", "peter11petrov@gmai.com", "6", "May", "1980", groupName);
+    ContactData contact = new ContactData().setName("Petr").setSurname("Petrov").setNickname("Wee")
+            .setCompany("Flower").setAddress("Lenina street 33-8").setHome("88142555555").setMobile("+79110000000").
+            setWork("555555").setEmail("peterpetrov@yandex.ru").setEmail2("peter11petrov@gmail.com").
+            setEmail3("peter1234petrov@gmail.com").setBday("6").setBmonth("May").setByear("1980").setGroup(groupName);
+    //ContactData contact = new ContactData("Petr", "Petrov", "Wee", "Flower", "88142555555", "+79110000000", "555555", "peterpetrov@yandex.ru", "peter11petrov@gmai.com", "6", "May", "1980", groupName);
     app.contact().create(contact);
     app.goTo().homePage();
     Contacts after = app.contact().all();

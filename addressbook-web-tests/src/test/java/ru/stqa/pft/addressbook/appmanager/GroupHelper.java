@@ -61,6 +61,7 @@ public class GroupHelper extends HelperBase {
     initGroupCreation();
     fillGroupForm(group);
     submitGroupCreation();
+    groupCache = null;
     returnToGroupPage();
   }
   public void modify(GroupData group) {
@@ -68,6 +69,7 @@ public class GroupHelper extends HelperBase {
     editSelectedGroups();
     fillGroupForm(group);
     submitGroupModification();
+    groupCache = null;
     returnToGroupPage();
   }
 
@@ -80,6 +82,7 @@ public class GroupHelper extends HelperBase {
   public void delete(GroupData group) {
     selectGroupById(group.getId());
     deleteSelectedGroups();
+    groupCache = null;
     returnToGroupPage();
   }
 
@@ -87,7 +90,7 @@ public class GroupHelper extends HelperBase {
     String groupName = wd.findElement(By.name("selected[]")).getAttribute("title");
     return groupName.substring(8, groupName.length() - 1);
   }
-  public int getGroupCount() {
+  public int count() {
     return wd.findElements(By.xpath("//span[@class='group']")).size();
   }
 
@@ -103,15 +106,19 @@ public class GroupHelper extends HelperBase {
     return groups;
   }*/
 
+  private Groups groupCache = null;
   public Groups all() {
-    Groups groups = new Groups(); // cоздаем список объектов класса GroupData
+    if (groupCache != null) {
+      return new Groups(groupCache); //возвращаем копию
+    }
+    groupCache = new Groups(); // cоздаем список объектов класса GroupData
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //создаем список веб-элементов
     for (WebElement element: elements) { // перебираем все элементы
       String name = element.getText(); // в строковую перемененную записываем навание группы
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
       //GroupData group = new GroupData().withId(id).withName(name); // создаем объект класса GroupData, в конструкторе передаем искомое название группы первым параметром
-      groups.add(new GroupData().withId(id).withName(name)); // добавляем объект класса GroupData в список
+      groupCache.add(new GroupData().withId(id).withName(name)); // добавляем объект класса GroupData в список
     }
-    return groups;
+    return new Groups(groupCache);
   }
 }

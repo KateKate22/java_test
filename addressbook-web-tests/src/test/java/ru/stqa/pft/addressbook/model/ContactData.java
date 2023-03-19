@@ -4,20 +4,30 @@ import java.util.Objects;
 
 public class ContactData {
   private int id;
-  private final String name;
-  private final String surname;
-  private final String nickname;
-  private final String company;
-  private final String home;
-  private final String mobile;
-  private final String email;
-  private final String email2;
-  private final String bday;
-  private final String bmonth;
-  private final String byear;
-  private final String group;
+  private String name;
+  private String surname;
+  private String nickname;
+  private String company;
+  private String home;
+  private String mobile;
+  private String work;
+  private String email;
+  private String email2;
 
-  public ContactData(String name, String surname, String nickname, String company, String home, String mobile, String email, String email2, String bday, String bmonth, String byear, String group) {
+  private String email3;
+  private String bday;
+  private String bmonth;
+  private String byear;
+  private String group;
+
+  private String allPhones;
+
+  private String allEmails;
+  private String address;
+
+  public ContactData() {}
+
+  public ContactData(String name, String surname, String nickname, String company, String home, String mobile, String work, String email, String email2, String bday, String bmonth, String byear, String group) {
     this.id = Integer.MAX_VALUE;
     this.name = name;
     this.surname = surname;
@@ -25,6 +35,7 @@ public class ContactData {
     this.company = company;
     this.home = home;
     this.mobile = mobile;
+    this.work = work;
     this.email = email;
     this.email2 = email2;
     this.bday = bday;
@@ -33,7 +44,7 @@ public class ContactData {
     this.group = group;
   }
 
-  public ContactData(int id, String name, String surname, String nickname, String company, String home, String mobile, String email, String email2, String bday, String bmonth, String byear, String group) {
+  public ContactData(int id, String name, String surname, String nickname, String company, String home, String mobile, String work, String email, String email2, String bday, String bmonth, String byear, String group) {
     this.id = id;
     this.name = name;
     this.surname = surname;
@@ -41,6 +52,7 @@ public class ContactData {
     this.company = company;
     this.home = home;
     this.mobile = mobile;
+    this.work = work;
     this.email = email;
     this.email2 = email2;
     this.bday = bday;
@@ -51,6 +63,90 @@ public class ContactData {
 
   public ContactData setId(int id) {
     this.id = id;
+    return this;
+  }
+
+  public ContactData setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public ContactData setSurname(String surname) {
+    this.surname = surname;
+    return this;
+  }
+
+  public ContactData setNickname(String nickname) {
+    this.nickname = nickname;
+    return this;
+  }
+
+  public ContactData setCompany(String company) {
+    this.company = company;
+    return this;
+  }
+
+  public ContactData setHome(String home) {
+    this.home = home;
+    return this;
+  }
+
+  public ContactData setMobile(String mobile) {
+    this.mobile = mobile;
+    return this;
+  }
+
+  public ContactData setWork(String work) {
+    this.work = work;
+    return this;
+  }
+
+  public ContactData setEmail(String email) {
+    this.email = email;
+    return this;
+  }
+
+  public ContactData setEmail2(String email2) {
+    this.email2 = email2;
+    return this;
+  }
+
+  public ContactData setEmail3(String email3) {
+    this.email3 = email3;
+    return this;
+  }
+  public ContactData setBday(String bday) {
+    this.bday = bday;
+    return this;
+  }
+
+  public ContactData setBmonth(String bmonth) {
+    this.bmonth = bmonth;
+    return this;
+  }
+
+  public ContactData setByear(String byear) {
+    this.byear = byear;
+    return this;
+  }
+
+  public ContactData setGroup(String group) {
+    this.group = group;
+    return this;
+  }
+
+  public ContactData setAddress(String address) {
+    this.address = address;
+    return this;
+  }
+
+  public ContactData setAllPhones(String allPhones) {
+    this.allPhones = allPhones;
+    return this;
+  }
+
+  public ContactData setAllEmails(String allEmails) {
+    this.allEmails = allEmails;
     return this;
   }
 
@@ -90,6 +186,10 @@ public class ContactData {
     return email2;
   }
 
+  public String getEmail3() {
+    return email3;
+  }
+
   public String getBday() {
     return bday;
   }
@@ -103,6 +203,20 @@ public class ContactData {
   }
 
   public String getGroup() { return group; }
+
+  public String getWork() { return work; }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public String getAllPhones() {
+    return allPhones;
+  }
+
+  public String getAllEmails() {
+    return allEmails;
+  }
 
   @Override
   public String toString() {
