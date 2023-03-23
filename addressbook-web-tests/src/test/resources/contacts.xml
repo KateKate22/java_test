@@ -1,0 +1,30 @@
+<list>
+  <contact>
+    <name>Petr0</name>
+    <surname>Petrov0</surname>
+    <home>775510</home>
+    <mobile>89114441120</mobile>
+    <address>Lenina street 0</address>
+  </contact>
+  <contact>
+    <name>Petr1</name>
+    <surname>Petrov1</surname>
+    <home>775511</home>
+    <mobile>89114441121</mobile>
+    <address>Lenina street 1</address>
+  </contact>
+  <contact>
+    <name>Petr2</name>
+    <surname>Petrov2</surname>
+    <home>775512</home>
+    <mobile>89114441122</mobile>
+    <address>Lenina street 2</address>
+  </contact>
+  <contact>
+    <name>Petr3</name>
+    <surname>Petrov3</surname>
+    <home>775513</home>
+    <mobile>89114441123</mobile>
+    <address>Lenina street 3</address>
+  </contact>
+</list>

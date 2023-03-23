@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Petr0",
+    "surname": "Petrov0",
+    "home": "77-55-10",
+    "mobile": "+79114441120",
+    "email": "petrov0@gmail.com",
+    "email2": "petrov0@yandex.ru",
+    "address": "Lenina street 0"
+  },
+  {
+    "name": "Petr1",
+    "surname": "Petrov1",
+    "home": "77-55-11",
+    "mobile": "+79114441121",
+    "email": "petrov1@gmail.com",
+    "email2": "petrov1@yandex.ru",
+    "address": "Lenina street 1"
+  },
+  {
+    "name": "Petr2",
+    "surname": "Petrov2",
+    "home": "77-55-12",
+    "mobile": "+79114441122",
+    "email": "petrov2@gmail.com",
+    "email2": "petrov2@yandex.ru",
+    "address": "Lenina street 2"
+  },
+  {
+    "name": "Petr3",
+    "surname": "Petrov3",
+    "home": "77-55-13",
+    "mobile": "+79114441123",
+    "email": "petrov3@gmail.com",
+    "email2": "petrov3@yandex.ru",
+    "address": "Lenina street 3"
+  }
+]

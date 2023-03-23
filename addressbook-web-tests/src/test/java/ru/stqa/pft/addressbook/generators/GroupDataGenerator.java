@@ -3,6 +3,9 @@ package ru.stqa.pft.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.thoughtworks.xstream.XStream;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.io.File;
@@ -17,8 +20,11 @@ public class GroupDataGenerator {
   @Parameter(names = "-c", description = "Group count")
   public int count;
 
-  @Parameter(names = "-f", description = "Target file")
+  @Parameter(names = "-p", description = "File Path")
   public String filePath;
+
+  @Parameter(names = "-f", description = "Saving format")
+  public String format;
 
 public static void main(String[] args) throws IOException {
   GroupDataGenerator generator = new GroupDataGenerator();
@@ -34,12 +40,39 @@ public static void main(String[] args) throws IOException {
   //File file = new File(args[1]);
 }
 
-  private void run() throws IOException {
+  void run() throws IOException {
     List<GroupData> groups = makeListGroups(count);
-    writeGroupsInFile(groups, new File(filePath));
+    if (format.equals("csv")) {
+      writeGroupsInFileCsv(groups, new File(filePath));
+    } else if (format.equals("xml")) {
+      writeGroupsInFileXml(groups, new File(filePath));
+    } else if (format.equals("json")) {
+      writeGroupsInFileJson(groups, new File(filePath));
+    }
+    else {
+      System.out.println("Unrecognized format: " + format);
+    }
   }
 
-  private void writeGroupsInFile(List<GroupData> groups, File file) throws IOException {
+  private void writeGroupsInFileJson(List<GroupData> groups, File file) throws IOException {
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+    String json = gson.toJson(groups);
+    Writer writeInFile = new FileWriter(file);
+    writeInFile.write(json);
+    writeInFile.close();
+  }
+
+  private void writeGroupsInFileXml(List<GroupData> groups, File file) throws IOException {
+    XStream xstream = new XStream();
+    xstream.processAnnotations(GroupData.class);
+    //xstream.alias("group", GroupData.class);
+    String xml = xstream.toXML(groups);
+    Writer writeInFile = new FileWriter(file);
+    writeInFile.write(xml);
+    writeInFile.close();
+  }
+
+  private void writeGroupsInFileCsv(List<GroupData> groups, File file) throws IOException {
     Writer writeInFile = new FileWriter(file);
     for (GroupData group: groups) {
     writeInFile.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
