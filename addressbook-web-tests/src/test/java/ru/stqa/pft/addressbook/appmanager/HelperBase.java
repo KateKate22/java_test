@@ -1,12 +1,10 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
+import java.util.List;
 
 public class HelperBase {
   protected WebDriver wd;
@@ -39,8 +37,17 @@ public class HelperBase {
 
 
   protected void select(By locator, String text) {
-    wd.findElement(locator).click();
-    new Select(wd.findElement(locator)).selectByVisibleText(text);
+    if (text != null) {
+      WebElement element = wd.findElement(locator);
+      List<WebElement> elements = element.findElements(By.tagName("option"));
+      for (WebElement el : elements) {
+        if (el.getText().equals(text)) {
+          wd.findElement(locator).click();
+          new Select(wd.findElement(locator)).selectByVisibleText(text);
+          break;
+        }
+      }
+    }
   }
 
   public boolean isElementPresent(By locator) {

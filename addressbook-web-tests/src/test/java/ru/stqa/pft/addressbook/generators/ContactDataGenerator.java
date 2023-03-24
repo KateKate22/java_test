@@ -66,10 +66,11 @@ public class ContactDataGenerator {
   private List<ContactData> generateContacts(int count) {
     List<ContactData> contacts = new ArrayList<>();
     for (int i=0; i < count; i++) {
-      contacts.add(new ContactData().setName(String.format("Petr%s", i)).setSurname(String.format("Petrov%s", i))
-              .setMobile(String.format("+7911444112%s", i)).setHome(String.format("77-55-1%s", i))
-              .setAddress(String.format("Lenina street %s", i)).setEmail(String.format("petrov%s@gmail.com", i))
-              .setEmail2(String.format("petrov%s@yandex.ru", i)));
+      contacts.add(new ContactData().setName(String.format("Petr%s", i+1)).setSurname(String.format("Petrov%s", i+1))
+              .setMobile(String.format("+7911444112%s", i+1)).setHome(String.format("77-55-1%s", i+1))
+              .setAddress(String.format("Lenina street %s", i+1)).setEmail(String.format("petrov%s@gmail.com", i+1))
+              .setEmail2(String.format("petrov%s@yandex.ru", i+1)).setBday(String.format("%s", i+1)).setBmonth("May")
+              .setGroup(String.format("test%s", i+1)));
     }
     return contacts;
   }
