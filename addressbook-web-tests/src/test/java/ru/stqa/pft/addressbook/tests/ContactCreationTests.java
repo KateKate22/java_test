@@ -28,34 +28,39 @@ public class ContactCreationTests extends TestBase {
   @DataProvider
   public Iterator<Object[]> contactsDataTestXml() throws IOException {
     List<ContactData> list = new ArrayList<>();
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src\\test\\resources\\contacts.xml")));
-    String line = reader.readLine();
-    String xmlData = "";
-    while(line != null) {
-      xmlData += line;
-      line = reader.readLine();
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src\\test\\resources\\contacts.xml")))) {
+      String line = reader.readLine();
+      String xmlData = "";
+      while (line != null) {
+        xmlData += line;
+        line = reader.readLine();
+      }
+      XStream xstream = new XStream();
+      xstream.processAnnotations(ContactData.class);
+      xstream.allowTypes(new Class[]{ContactData.class});
+      List<ContactData> contacts = (List<ContactData>) xstream.fromXML(xmlData);
+      return contacts.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    XStream xstream = new XStream();
-    xstream.processAnnotations(ContactData.class);
-    xstream.allowTypes(new Class[] {ContactData.class});
-    List<ContactData> contacts = (List<ContactData>) xstream.fromXML(xmlData);
-    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
   @DataProvider
   public Iterator<Object[]> contactsDataTestJson() throws IOException {
     List<ContactData> list = new ArrayList<>();
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src\\test\\resources\\contacts.json")));
-    String line = reader.readLine();
-    String jsonData = "";
-    while(line != null) {
-      jsonData += line;
-      line = reader.readLine();
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src\\test\\resources\\contacts.json"))))
+    {
+      String line = reader.readLine();
+      String jsonData = "";
+      while (line != null) {
+        jsonData += line;
+        line = reader.readLine();
+      }
+      Gson gson = new Gson();
+      List<ContactData> contacts = gson.fromJson(jsonData, new TypeToken<List<ContactData>>() {
+      }.getType());
+      return contacts.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    Gson gson = new Gson();
-    List<ContactData> contacts = gson.fromJson(jsonData, new TypeToken<List<ContactData>>(){}.getType());
-    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
+
   @BeforeMethod
   public void ensurePreconditions() {
     app.goTo().groupPage(); // переходим в группы для осуществления последующей проверки
@@ -66,13 +71,13 @@ public class ContactCreationTests extends TestBase {
     app.goTo().homePage(); // переход на страницу с контактами
   }
 
-  @Test(dataProvider ="contactsDataTestXml")
+  @Test(dataProvider = "contactsDataTestXml")
   public void testContactCreation(ContactData contact) throws Exception {
     Contacts before = app.contact().all();
     app.contact().create(contact);
     app.goTo().homePage();
     Contacts after = app.contact().all();
-    assertThat(after.size(), equalTo(before.size()+1));
+    assertThat(after.size(), equalTo(before.size() + 1));
     assertThat(after, equalTo(
             before.withAdded(contact.setId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
   }

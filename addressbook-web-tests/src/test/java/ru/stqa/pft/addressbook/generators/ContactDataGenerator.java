@@ -49,18 +49,20 @@ public class ContactDataGenerator {
   private void writeDataInFileJson(List<ContactData> contacts, File file) throws IOException {
     Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     String json = gson.toJson(contacts);
-    Writer writeInFile = new FileWriter(file);
-    writeInFile.write(json);
-    writeInFile.close();
+    try (Writer writeInFile = new FileWriter(file)) { //реализуем автоматическое закрытие файла
+      writeInFile.write(json);
+    }
+    //writeInFile.close();
   }
 
   private void writeDataInFileXml(List<ContactData> contacts, File file) throws IOException {
     XStream xstream = new XStream();
     xstream.processAnnotations(ContactData.class);
     String xml = xstream.toXML(contacts);
-    Writer writeInFile = new FileWriter(file);
-    writeInFile.write(xml);
-    writeInFile.close();
+    try (Writer writeInFile = new FileWriter(file))
+    {
+      writeInFile.write(xml);
+    }
   }
 
   private List<ContactData> generateContacts(int count) {

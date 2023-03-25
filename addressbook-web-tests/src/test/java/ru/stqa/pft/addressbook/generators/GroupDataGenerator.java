@@ -26,19 +26,19 @@ public class GroupDataGenerator {
   @Parameter(names = "-f", description = "Saving format")
   public String format;
 
-public static void main(String[] args) throws IOException {
-  GroupDataGenerator generator = new GroupDataGenerator();
-  JCommander jCommander = new JCommander(generator);
-  try {
-    jCommander.parse(args);
-  } catch (ParameterException ex) {
-    jCommander.usage();
-    return;
+  public static void main(String[] args) throws IOException {
+    GroupDataGenerator generator = new GroupDataGenerator();
+    JCommander jCommander = new JCommander(generator);
+    try {
+      jCommander.parse(args);
+    } catch (ParameterException ex) {
+      jCommander.usage();
+      return;
+    }
+    generator.run();
+    //int count = Integer.parseInt(args[0]);
+    //File file = new File(args[1]);
   }
-  generator.run();
-  //int count = Integer.parseInt(args[0]);
-  //File file = new File(args[1]);
-}
 
   void run() throws IOException {
     List<GroupData> groups = makeListGroups(count);
@@ -48,8 +48,7 @@ public static void main(String[] args) throws IOException {
       writeGroupsInFileXml(groups, new File(filePath));
     } else if (format.equals("json")) {
       writeGroupsInFileJson(groups, new File(filePath));
-    }
-    else {
+    } else {
       System.out.println("Unrecognized format: " + format);
     }
   }
@@ -57,9 +56,9 @@ public static void main(String[] args) throws IOException {
   private void writeGroupsInFileJson(List<GroupData> groups, File file) throws IOException {
     Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
     String json = gson.toJson(groups);
-    Writer writeInFile = new FileWriter(file);
-    writeInFile.write(json);
-    writeInFile.close();
+    try (Writer writeInFile = new FileWriter(file)) {
+      writeInFile.write(json);
+    }
   }
 
   private void writeGroupsInFileXml(List<GroupData> groups, File file) throws IOException {
@@ -67,26 +66,26 @@ public static void main(String[] args) throws IOException {
     xstream.processAnnotations(GroupData.class);
     //xstream.alias("group", GroupData.class);
     String xml = xstream.toXML(groups);
-    Writer writeInFile = new FileWriter(file);
-    writeInFile.write(xml);
-    writeInFile.close();
+    try (Writer writeInFile = new FileWriter(file)) {
+      writeInFile.write(xml);
+    }
   }
 
   private void writeGroupsInFileCsv(List<GroupData> groups, File file) throws IOException {
-    Writer writeInFile = new FileWriter(file);
-    for (GroupData group: groups) {
-    writeInFile.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
+    try (Writer writeInFile = new FileWriter(file)) {
+      for (GroupData group : groups) {
+        writeInFile.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
+      }
     }
-    writeInFile.close();
   }
 
   private List<GroupData> makeListGroups(int count) {
-  List<GroupData> groups = new ArrayList<>();
-  for (int i = 0; i < count; i++) {
-    groups.add(new GroupData().withName(String.format("test %s", i))
-            .withHeader(String.format("header %s", i)).withFooter(String.format("footer %s", i)));
-  }
-  return groups;
+    List<GroupData> groups = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+      groups.add(new GroupData().withName(String.format("test %s", i))
+              .withHeader(String.format("header %s", i)).withFooter(String.format("footer %s", i)));
+    }
+    return groups;
   }
 
 }
