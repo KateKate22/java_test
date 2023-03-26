@@ -15,13 +15,13 @@ public class ContactDataInHomePageTests extends TestBase {
   String groupName; //  строковая переменная, хранящая имя группы, для последующей передачи в качестве параметра при создании контакта;
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.contact().all().size() == 0) { // проверяем есть ли хотя бы один контакт в табличной части
+    if (app.dbHelper().contacts().size() == 0) { // проверяем есть ли хотя бы один контакт в табличной части
       app.goTo().groupPage(); // переходим в группы для осуществления последующей проверки
-      if (app.group().all().size() == 0) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
-        app.group().create(new GroupData().withName("test1"));
+      if (app.dbHelper().groups().size() == 0) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
+        app.groupHelper().create(new GroupData().withName("test1"));
       }
-      groupName = app.group().groupName(); // записываем в строковую переменную имя созданной либо уже имеющейся группы
-      app.contact().create(new ContactData().setName("Petr").setSurname("Petrov").setNickname("Wee")
+      groupName = app.groupHelper().groupName(); // записываем в строковую переменную имя созданной либо уже имеющейся группы
+      app.contactHelper().create(new ContactData().setName("Petr").setSurname("Petrov").setNickname("Wee")
               .setCompany("Flower").setAddress("Lenina street 33-8").setHome("88142555555").setMobile("+79110000000").
               setWork("555555").setEmail("peterpetrov@yandex.ru").setEmail2("peter11petrov@gmail.com").
               setEmail3("peter1234petrov@gmail.com").setBday("6").setBmonth("May").setByear("1980").setGroup(groupName));
@@ -31,8 +31,8 @@ public class ContactDataInHomePageTests extends TestBase {
   }
   @Test
   public void testContactDataInHomePage() {
-    ContactData contact = app.contact().all().iterator().next();
-    ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
+    ContactData contact = app.contactHelper().all().iterator().next();
+    ContactData contactInfoFromEditForm = app.contactHelper().infoFromEditForm(contact);
     // проверяем совпадение адреса на главной странице и форме редактирования:
     MatcherAssert.assertThat(contact.getAddress(), equalTo(contactInfoFromEditForm.getAddress()));
     // проверяем совпадение эмейлов на главной странице и форме редактирования:

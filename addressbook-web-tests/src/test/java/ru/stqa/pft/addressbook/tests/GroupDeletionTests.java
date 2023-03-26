@@ -12,17 +12,17 @@ public class GroupDeletionTests extends TestBase {
   @BeforeMethod
   public void ensurePrecondions() {
     app.goTo().groupPage();
-    if (app.group().all().size() == 0) { // проверяем есть ли хотя бы одна группа в списке
-      app.group().create(new GroupData().withName("test1"));
+    if (app.groupHelper().all().size() == 0) { // проверяем есть ли хотя бы одна группа в списке
+      app.groupHelper().create(new GroupData().withName("test1"));
     }
   }
   @Test
   public void testGroupDeletion() throws Exception {
-    Groups before = app.group().all();
+    Groups before = app.dbHelper().groups();
     GroupData deletedGroup = before.iterator().next();
-    app.group().delete(deletedGroup);
-    assertThat(app.group().count(), equalTo(before.size()-1));
-    Groups after = app.group().all();
+    app.groupHelper().delete(deletedGroup);
+    assertThat(app.groupHelper().count(), equalTo(before.size()-1));
+    Groups after = app.dbHelper().groups();
     assertThat(after, equalTo(before.without(deletedGroup)));
   }
 }

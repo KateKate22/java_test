@@ -64,8 +64,8 @@ public class ContactCreationTests extends TestBase {
   @BeforeMethod
   public void ensurePreconditions() {
     app.goTo().groupPage(); // переходим в группы для осуществления последующей проверки
-    if (app.group().all().size() == 0) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
-      app.group().create(new GroupData().withName("test1"));
+    if (app.dbHelper().groups().size() == 0) { // проверяем есть ли хотя бы одна группа в списке; если нет, создаем ее
+      app.groupHelper().create(new GroupData().withName("test1"));
     }
     //groupName = app.group().groupName(); // записываем в строковую переменную имя созданной либо уже имеющейся группы
     app.goTo().homePage(); // переход на страницу с контактами
@@ -73,10 +73,11 @@ public class ContactCreationTests extends TestBase {
 
   @Test(dataProvider = "contactsDataTestXml")
   public void testContactCreation(ContactData contact) throws Exception {
-    Contacts before = app.contact().all();
-    app.contact().create(contact);
+    Contacts before = app.dbHelper().contacts();
+    app.contactHelper().create(contact);
     app.goTo().homePage();
-    Contacts after = app.contact().all();
+    Contacts after = app.dbHelper().contacts();
+    Contacts afterAdd = before.withAdded(contact.setId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()));
     assertThat(after.size(), equalTo(before.size() + 1));
     assertThat(after, equalTo(
             before.withAdded(contact.setId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));

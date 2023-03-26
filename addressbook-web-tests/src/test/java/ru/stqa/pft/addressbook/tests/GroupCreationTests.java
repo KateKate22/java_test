@@ -21,7 +21,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GroupCreationTests extends TestBase {
-
   @DataProvider
   public Iterator<Object[]> validGroupsFromCsv() throws IOException {
     List<Object[]> list = new ArrayList<>();
@@ -77,10 +76,10 @@ public class GroupCreationTests extends TestBase {
   public void testGroupCreation(GroupData group) throws Exception {
     //GroupData group = new GroupData();
     app.goTo().groupPage();
-    Groups before = app.group().all();
-    app.group().create(group);
-    assertThat(app.group().count(), equalTo(before.size() + 1)); // хэширование (предварительная проверка при помощи более быстрой операции)
-    Groups after = app.group().all();
+    Groups before = app.dbHelper().groups();
+    app.groupHelper().create(group);
+    assertThat(app.groupHelper().count(), equalTo(before.size() + 1)); // хэширование (предварительная проверка при помощи более быстрой операции)
+    Groups after = app.dbHelper().groups();
     //group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
     //Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
     //before.sort(byId);
@@ -92,11 +91,11 @@ public class GroupCreationTests extends TestBase {
   @Test(enabled = false)
   public void testBadGroupCreation() throws Exception {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+    Groups before = app.dbHelper().groups();
     GroupData group = new GroupData().withName("test2'");
-    app.group().create(group);
-    assertThat(app.group().count(), equalTo(before.size()));
-    Groups after = app.group().all();
+    app.groupHelper().create(group);
+    assertThat(app.groupHelper().count(), equalTo(before.size()));
+    Groups after = app.dbHelper().groups();
     assertThat(after, equalTo(before));
   }
 }

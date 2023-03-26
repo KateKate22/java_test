@@ -19,8 +19,10 @@ public class ApplicationManager {
   private NavigationHelper navigationHelper;
   private GroupHelper groupHelper;
   private SessionHelper sessionHelper;
+  private DbHelper dbHelper;
 
   private String browser;
+
   public ApplicationManager(String browser) {
     this.browser = browser;
     properties = new Properties();
@@ -29,6 +31,9 @@ public class ApplicationManager {
   public void init() throws IOException {
     String target = System.getProperty("target", "local");
     properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
+    dbHelper = new DbHelper();
+
     if (browser.equals(Browser.CHROME.browserName())) {
       wd = new ChromeDriver();
     } else if (browser.equals(Browser.FIREFOX.browserName())) {
@@ -46,11 +51,11 @@ public class ApplicationManager {
   }
 
   public void stop() {
-    getSessionHelper().logout();
+    sessionHelper().logout();
     wd.quit();
   }
 
-  public GroupHelper group() {
+  public GroupHelper groupHelper() {
     return groupHelper;
   }
 
@@ -58,11 +63,15 @@ public class ApplicationManager {
     return navigationHelper;
   }
 
-  public ContactHelper contact() {
+  public ContactHelper contactHelper() {
     return contactHelper;
   }
 
-  public SessionHelper getSessionHelper() {
+  public SessionHelper sessionHelper() {
     return sessionHelper;
+  }
+
+  public DbHelper dbHelper() {
+    return dbHelper;
   }
 }
