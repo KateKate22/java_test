@@ -39,4 +39,23 @@ public class DbHelper {
     return new Contacts(result);
   }
 
+  // реализуем метод, который будет возвращать из БД контакт по идентификатору, передаваемому в качестве параметра
+  public ContactData contact(int id) {
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery("from ContactData where deprecated= '0000-00-00' and id = '" + id + "'").list();
+    session.getTransaction().commit();
+    session.close();
+    return result.get(0);
+  }
+
+  // реализуем метод, который будет возвращать из БД группу по идентификатору, передаваемому в качестве параметра
+  public GroupData group(int id) {
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<GroupData> result = session.createQuery("from GroupData where id = '" + id + "'").list();
+    session.getTransaction().commit();
+    session.close();
+    return result.get(0);
+  }
 }

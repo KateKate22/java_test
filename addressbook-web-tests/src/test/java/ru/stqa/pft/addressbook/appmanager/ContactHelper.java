@@ -3,9 +3,12 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.List;
 
@@ -45,9 +48,11 @@ public class ContactHelper extends HelperBase {
   public void initContactCreation() {
     click(By.linkText("add new"));
   }
+
   public void submitContactDeletion() {
     click(By.xpath("//input[@value='Delete']"));
   }
+
   public void closeContactDeletionAlert() {
     wd.switchTo().alert().accept();
     click(By.linkText("home"));
@@ -56,9 +61,11 @@ public class ContactHelper extends HelperBase {
   public void selectContactToDelete(int index) {
     wd.findElements(By.name("selected[]")).get(index).click();
   }
+
   private void selectContactById(int id) {
     wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
   }
+
   public void submitContactModification() {
     click(By.name("update"));
   }
@@ -67,7 +74,7 @@ public class ContactHelper extends HelperBase {
     wd.findElements(By.xpath("//img[@alt='Edit']")).get(index).click();
   }
 
-  public void selectContactToEditById (int id) {
+  public void selectContactToEditById(int id) {
     //WebElement checkbox = wd.findElement(By.cssSelector(String.format("input[value='%s']", id)));
     //WebElement row = checkbox.findElement(By.xpath("./../.."));
     //List<WebElement> cells = row.findElements(By.tagName("td"));
@@ -115,7 +122,7 @@ public class ContactHelper extends HelperBase {
   public Contacts all() {
     Contacts contacts = new Contacts();
     List<WebElement> elements = wd.findElements(By.xpath("//table/tbody/tr[@name='entry']"));
-    for (WebElement element: elements) {
+    for (WebElement element : elements) {
       List<WebElement> elementFields = element.findElements(By.tagName("td"));
       //List<WebElement> elementFields = element.findElements(By.xpath("td[not(@class)]"));
       int id = Integer.parseInt(elementFields.get(0).findElement(By.tagName("input")).getAttribute("id"));
@@ -143,5 +150,46 @@ public class ContactHelper extends HelperBase {
     String email3 = wd.findElement(By.name("email3")).getAttribute("value");
     wd.navigate().back();
     return new ContactData().setName(firstname).setSurname(lastname).setAddress(address).setHome(home).setMobile(mobile).setWork(work).setEmail(email).setEmail2(email2).setEmail3(email3);
+  }
+
+  public int addInGroup(ContactData contact, Groups groupsList) { //метод принимает на вход контакт для включения в группу и исходный список групп этого контакта
+    int idGroup = 0; // переменная, которая будет хранить идентификатор выбранной группы, проинициализируем значением 0
+    List<WebElement> options = wd.findElements(By.xpath("//select[@name = 'to_group']/option"));
+
+    selectContactById(contact.getId());
+    click(By.name("to_group"));
+
+    for (WebElement option : options) { // здесь в выпадающем списке будем искать группу, в которую еще не включен искомый контакт
+      // как только встретим подходящую опцию, выберем ее (контакт будет включен в группу, в которой ранее не состоял)
+      boolean isInGroup = false; // булевская переменная, если контакт уже включен в группу из выпадающего списка, то true, иначе false
+      for (GroupData group : groupsList) {
+        if (Integer.parseInt(option.getAttribute("value")) == group.getId()) {
+          isInGroup = true; // контакт уже включен в данную группу, значит присваиваем true булевской переменной
+        }
+      }
+      if (!isInGroup) { // если false, значит мы нашли группу, в которую искомый контакт не входит, и можем включать контакт в эту группу
+        idGroup = Integer.parseInt(option.getAttribute("value"));
+        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(option.getText());
+        click(By.name("add"));
+        break; // выходим из цикла, т.к. нашли нужную группу
+      }
+    }
+    return idGroup;
+  }
+
+  public void addInGroup(ContactData contact) { //упрощенный метод добавления контакта в группах, используемый в предпроверках
+    WebElement option = wd.findElement(By.xpath("//select[@name = 'to_group']/option[1]"));
+    selectContactById(contact.getId());
+    click(By.name("to_group"));
+    new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(option.getText());
+    click(By.name("add"));
+  }
+
+  public void deleteFromGroup(ContactData contact, int groupId) {
+    click(By.name("group"));
+    WebElement option = wd.findElement(By.xpath(String.format("//select[@name='group']/option[@value=%s]", groupId)));
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText(option.getText());
+    selectContactById(contact.getId());
+    click(By.name("remove"));
   }
 }
