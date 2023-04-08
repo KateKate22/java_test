@@ -15,7 +15,6 @@ dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.15.Final'
 }
-
 task testGroups (type: Test) {
     useTestNG {
         suites 'src/test/resources/testng-groups.xml'
@@ -32,6 +31,7 @@ task testGroups (type: Test) {
     if (project.hasProperty('verifyUI')) {
         systemProperty 'verifyUI', "$verifyUI"
     }
+
 }
 
 

@@ -42,5 +42,7 @@ public class ContactAddInGroupTests extends TestBase {
     Groups contactGroupsAfter = cont.getGroups(); // получаем список групп контакта после его добавления в группу
     assertThat(contactGroupsAfter.size(), equalTo(contactGroupsBefore.size() + 1)); // сравниваем по размерности списки групп (в которые входит контакт) до и после
     assertThat(contactGroupsAfter, equalTo(contactGroupsBefore.withAdded(groupToAdd))); //сравниваем сами списки
+    //Set<ContactData> conts = groupToAdd.getContacts();
+    //Boolean bool = conts.contains(contactInGroup);
   }
 }

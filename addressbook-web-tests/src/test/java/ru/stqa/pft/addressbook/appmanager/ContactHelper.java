@@ -169,7 +169,8 @@ public class ContactHelper extends HelperBase {
       }
       if (!isInGroup) { // если false, значит мы нашли группу, в которую искомый контакт не входит, и можем включать контакт в эту группу
         idGroup = Integer.parseInt(option.getAttribute("value"));
-        new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(option.getText());
+        //new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(option.getText());
+        new Select(wd.findElement(By.name("to_group"))).selectByValue(String.format("%s", option.getAttribute("value")));
         click(By.name("add"));
         break; // выходим из цикла, т.к. нашли нужную группу
       }
@@ -188,7 +189,8 @@ public class ContactHelper extends HelperBase {
   public void deleteFromGroup(ContactData contact, int groupId) {
     click(By.name("group"));
     WebElement option = wd.findElement(By.xpath(String.format("//select[@name='group']/option[@value=%s]", groupId)));
-    new Select(wd.findElement(By.name("group"))).selectByVisibleText(option.getText());
+    //new Select(wd.findElement(By.name("group"))).selectByVisibleText(option.getText());
+    new Select(wd.findElement(By.name("group"))).selectByValue(String.format("%s", option.getAttribute("value")));
     selectContactById(contact.getId());
     click(By.name("remove"));
   }

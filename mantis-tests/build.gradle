@@ -8,6 +8,11 @@ dependencies {
     implementation 'org.testng:testng:6.9.10'
     implementation 'org.seleniumhq.selenium:selenium-java:4.8.1'
     implementation group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
+    implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
+    implementation group: 'org.subethamail', name: 'subethasmtp', version: '3.1.7'
+    implementation group: 'ru.lanwen.verbalregex', name: 'java-verbal-expressions', version: '1.8'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.5'
 }
 
 test {
