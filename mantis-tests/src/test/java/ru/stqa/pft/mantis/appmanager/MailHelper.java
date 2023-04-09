@@ -34,6 +34,22 @@ public class MailHelper {
     throw new Error("No mail :(");
   }
 
+  public MailMessage waitForMailForUser(int count, long timeout, String email) throws MessagingException, IOException {
+    long start = System.currentTimeMillis();
+    while (System.currentTimeMillis() < start + timeout) {
+      if (wiser.getMessages().size() >= count) {
+        List<MailMessage> messages = wiser.getMessages().stream().map((m) -> toModelMail(m)).collect(Collectors.toList());
+        return messages.stream().filter((m) -> m.to.equals(email)).findFirst().get();
+      }
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+    throw new Error("No mail :(");
+  }
+
   public static MailMessage toModelMail(WiserMessage m) {
     try {
       MimeMessage mm = m.getMimeMessage();
