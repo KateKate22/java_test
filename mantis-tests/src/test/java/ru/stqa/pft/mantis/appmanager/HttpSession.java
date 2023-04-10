@@ -34,7 +34,8 @@ public class HttpSession {
     post.setEntity(new UrlEncodedFormEntity(params));
     CloseableHttpResponse response = httpclient.execute(post);
     String body = getTextForm(response);
-    return body.contains(String.format("<a href=\"/mantisbt-2.25.6/account_page.php\">%s</a>", username));
+    String address = app.getProperty("web.baseUrl").substring(app.getProperty("web.baseUrl").indexOf("mantis")-1);
+    return body.contains(String.format("<a href=\"%s/account_page.php\">%s</a>", address, username));
   }
 
   private String getTextForm(CloseableHttpResponse response) throws IOException {
@@ -49,6 +50,7 @@ public class HttpSession {
     HttpGet get = new HttpGet(app.getProperty("web.baseUrl") + "/index.php");
     CloseableHttpResponse response = httpclient.execute(get);
     String body = getTextForm(response);
-    return body.contains(String.format("<a href=\"/mantisbt-2.25.6/account_page.php\">%s</a>", username));
+    String address = app.getProperty("web.baseUrl").substring(app.getProperty("web.baseUrl").indexOf("mantis")-1);
+    return body.contains(String.format("<a href=\"%s/account_page.php\">%s</a>", address, username));
   }
 }
