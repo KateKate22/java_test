@@ -9,6 +9,7 @@ dependencies {
     implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
     implementation "jakarta.xml.ws:jakarta.xml.ws-api:4.0.0"
     implementation "com.sun.xml.ws:jaxws-rt:4.0.1"
+    implementation group: 'biz.futureware.mantis', name: 'mantis-axis-soap-client', version: '1.2.19'
 }
 
 buildscript{
