@@ -11,6 +11,13 @@ import java.rmi.RemoteException;
 import java.util.Set;
 
 public class SoapTests extends TestBase {
+
+  @Test
+  public void testExample() throws MalformedURLException, ServiceException, RemoteException {
+    skipIfNotFixed(1);
+    System.out.println("Тест пройден");
+  }
+
   @Test
   public void testGetProjects() throws MalformedURLException, ServiceException, RemoteException {
     Set<Project> projects = app.soapHelper().getProjects();
@@ -18,6 +25,7 @@ public class SoapTests extends TestBase {
     for (Project project : projects) {
       System.out.println(project.getName());
     }
+    System.out.println("-----");
   }
 
   @Test

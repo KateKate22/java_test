@@ -14,7 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SoapHelper {
-  private  ApplicationManager app;
+  private ApplicationManager app;
+
   public SoapHelper(ApplicationManager app) {
     this.app = app;
   }
@@ -23,12 +24,13 @@ public class SoapHelper {
     MantisConnectPortType mc = getMantisConnect();
     ProjectData[] projects = mc.mc_projects_get_user_accessible("administrator", "root");
     return Arrays.asList(projects).stream()
-            .map( (p) -> new Project().withId(p.getId().intValue()).withName(p.getName())).collect(Collectors.toSet());
+            .map((p) -> new Project().withId(p.getId().intValue()).withName(p.getName())).collect(Collectors.toSet());
   }
 
-  private static MantisConnectPortType getMantisConnect() throws ServiceException, MalformedURLException {
+  private MantisConnectPortType getMantisConnect() throws ServiceException, MalformedURLException {
+    String url = app.getProperty("web.baseUrl");
     MantisConnectPortType mc = new MantisConnectLocator()
-            .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.6/api/soap/mantisconnect.php"));
+            .getMantisConnectPort(new URL(url + "/api/soap/mantisconnect.php"));
     return mc;
   }
 
@@ -46,5 +48,15 @@ public class SoapHelper {
             .withDescription(createdIssueData.getDescription())
             .withProject(new Project().withId(createdIssueData.getProject().getId().intValue())
                     .withName(createdIssueData.getProject().getName()));
+  }
+
+  public boolean BugIsNotFixed(int issueId) throws MalformedURLException, ServiceException, RemoteException {
+    MantisConnectPortType mc = getMantisConnect();
+    String statusName = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(issueId)).getStatus().getName();
+    if (!statusName.equals("resolved") && !statusName.equals("closed")) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
