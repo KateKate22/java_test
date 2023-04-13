@@ -14,6 +14,7 @@ dependencies {
     implementation group: 'ru.lanwen.verbalregex', name: 'java-verbal-expressions', version: '1.8'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.5'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+    implementation group: 'biz.futureware.mantis', name: 'mantis-axis-soap-client', version: '1.2.19'
 }
 
 test {
