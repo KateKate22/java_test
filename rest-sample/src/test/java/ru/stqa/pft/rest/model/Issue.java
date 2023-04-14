@@ -1,4 +1,4 @@
-package ru.stqa.pft.rest;
+package ru.stqa.pft.rest.model;
 
 import java.util.Objects;
 
@@ -6,6 +6,12 @@ public class Issue {
   private int id;
   private String subject;
   private String description;
+
+  public String getState_name() {
+    return state_name;
+  }
+
+  private String state_name;
 
   public int getId() {
     return id;
