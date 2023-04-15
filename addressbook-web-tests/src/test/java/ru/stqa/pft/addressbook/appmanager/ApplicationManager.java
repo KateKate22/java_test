@@ -60,7 +60,7 @@ public class ApplicationManager {
   }
 
   public void stop() {
-    //sessionHelper().logout();
+    sessionHelper().logout();
     wd.quit();
   }
 
