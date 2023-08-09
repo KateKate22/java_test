@@ -28,4 +28,6 @@ public class PrimeTests {
     boolean r = Primes.isPrimeWhile(c);
     Assert.assertTrue(Primes.isPrimeWhile(c));
   }
+
+  //изменения в ветке 101
 }
